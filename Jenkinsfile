@@ -21,6 +21,7 @@ pipeline {
                 script {
                     echo 'Running Docker Container...'
                     bat '''docker run -d -p 8081:8081 \
+                        --name myapp \
                         -e MYSQL_HOST=%MYSQL_HOST% \
                         -e MYSQL_PORT=%MYSQL_PORT% \
                         -e MYSQL_DB=%MYSQL_DB% \
