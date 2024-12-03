@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: studentapp
+        image: studentapp
+        imagePullPolicy: IfNotPresent  # Change to IfNotPresent if pulling from a registry
+        resources:
+          limits:
+            memory: "300Mi"
+            cpu: "300m"
+        ports:
+        - containerPort: 8081
+        volumeMounts:
+        - name: student-log
+          mountPath: /var/log/apps
+        env:
+        - name: MYSQL_HOST
+          value: "localhost"
+        - name: MYSQL_PORT
+          value: "31000"
+        - name: MYSQL_DB
+          value: "genpact"
+        - name: MYSQL_USER
+          value: "root"
+        - name: MYSQL_PASSWORD
+          value: "root"
+
+      volumes:
+      - name: student-log
+        hostPath:
+          path: /var/log/apps
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: serviceapp
+spec:
+  selector:
+    app: myapp
+  type: NodePort
+  ports:
+  - port: 8081
+    targetPort: 8081
+    nodePort: 31001

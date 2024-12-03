@@ -2,10 +2,13 @@ pipeline {
     agent any
     environment {
         MYSQL_HOST = "localhost"
-        MYSQL_PORT = "3306"
+        MYSQL_PORT = "31000"
         MYSQL_DB = "genpact"
         MYSQL_USER = "root"
-        MYSQL_PASSWORD = "Sagar@1234"
+        MYSQL_PASSWORD = "root"
+        DOCKER_IMAGE_NAME = "studentapp"
+        DOCKER_TAG = "latest"
+        KUBE_CONFIG_PATH = "C:\\Users\\850075939\\.kube"  // Path to kubeconfig on Windows
     }
     stages {
         stage('Build Docker Image') {
@@ -16,18 +19,13 @@ pipeline {
                 }
             }
         }
-        stage('Run Docker Container') {
+        stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    echo 'Running Docker Container...'
-                    bat '''docker run -d -p 8081:8081 \
-                        --name myapp \
-                        -e MYSQL_HOST=%MYSQL_HOST% \
-                        -e MYSQL_PORT=%MYSQL_PORT% \
-                        -e MYSQL_DB=%MYSQL_DB% \
-                        -e MYSQL_USER=%MYSQL_USER% \
-                        -e MYSQL_PASSWORD=%MYSQL_PASSWORD% \
-                        studentapp'''
+                    echo 'Deploying to Kubernetes...'
+                    bat """
+                        kubectl --kubeconfig=%KUBE_CONFIG_PATH% apply -f kubernetes-deployment.yml
+                    """
                 }
             }
         }
