@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         MYSQL_HOST = "localhost"
-        MYSQL_PORT = "3306"
+        MYSQL_PORT = "31000"
         MYSQL_DB = "genpact"
         MYSQL_USER = "root"
         MYSQL_PASSWORD = "root"
