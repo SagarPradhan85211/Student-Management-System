@@ -1,8 +1,8 @@
 pipeline {
     agent any
     environment {
-        MYSQL_HOST = "localhost"  // Replace with <KUBERNETES_NODE_IP> if outside the cluster
-        MYSQL_PORT = "31000"
+        MYSQL_HOST = "mysql"
+        MYSQL_PORT = "3306"
         MYSQL_DB = "genpact"
         MYSQL_USER = "root"
         MYSQL_PASSWORD = "root"
@@ -11,6 +11,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    echo 'Building Docker Image...'
                     sh 'docker build -t studentapp .'
                 }
             }
@@ -18,6 +19,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
+                    echo 'Deploying to Kubernetes...'
                     sh 'kubectl apply -f deployment.yml'
                 }
             }
@@ -25,8 +27,8 @@ pipeline {
         stage('Test Database Connection') {
             steps {
                 script {
+                    echo 'Testing Database Connection...'
                     sh '''#!/bin/bash
-                    # Test MySQL connection before deploying app
                     mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASSWORD -D $MYSQL_DB -e "SHOW TABLES;"
                     '''
                 }
