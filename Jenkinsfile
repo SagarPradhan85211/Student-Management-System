@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building Docker Image...'
-                    sh 'docker build -t studentapp .'
+                    bat 'docker build -t studentapp .'  // Use 'bat' for Windows
                 }
             }
         }
@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying to Kubernetes...'
-                    sh 'kubectl apply -f deployment.yml'
+                    bat 'kubectl apply -f deployment.yml'  // Use 'bat' for Windows
                 }
             }
         }
@@ -28,8 +28,8 @@ pipeline {
             steps {
                 script {
                     echo 'Testing Database Connection...'
-                    sh '''#!/bin/bash
-                    mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASSWORD -D $MYSQL_DB -e "SHOW TABLES;"
+                    bat '''@echo off
+                    mysql -h %MYSQL_HOST% -P %MYSQL_PORT% -u %MYSQL_USER% -p%MYSQL_PASSWORD% -D %MYSQL_DB% -e "SHOW TABLES;"  // Use batch script syntax for environment variables
                     '''
                 }
             }
