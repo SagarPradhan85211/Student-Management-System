@@ -6,7 +6,6 @@ pipeline {
         MYSQL_DB = "genpact"
         MYSQL_USER = "root"
         MYSQL_PASSWORD = "root"
-        KUBE_CONFIG = credentials('kube-config') // Jenkins credential ID for the kubeconfig
     }
     stages {
         stage('Build Docker Image') {
@@ -17,15 +16,18 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to Kubernetes') {
+        stage('Run Docker Container') {
             steps {
                 script {
-                    echo 'Deploying to Kubernetes...'
-                    // Use the kubeconfig from Jenkins credentials to authenticate kubectl
+                    echo 'Running Docker Container...'
                     sh '''#!/bin/bash
-                    echo $KUBE_CONFIG > kubeconfig.yaml
-                    export KUBECONFIG=$(pwd)/kubeconfig.yaml
-                    kubectl apply -f deployment.yml --validate=false
+                    docker run -d -p 8081:8081 \
+                        -e MYSQL_HOST=$MYSQL_HOST \
+                        -e MYSQL_PORT=$MYSQL_PORT \
+                        -e MYSQL_DB=$MYSQL_DB \
+                        -e MYSQL_USER=$MYSQL_USER \
+                        -e MYSQL_PASSWORD=$MYSQL_PASSWORD \
+                        studentapp
                     '''
                 }
             }
