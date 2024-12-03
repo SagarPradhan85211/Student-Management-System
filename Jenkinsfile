@@ -6,13 +6,14 @@ pipeline {
         MYSQL_DB = "genpact"
         MYSQL_USER = "root"
         MYSQL_PASSWORD = "root"
+        KUBE_CONFIG = credentials('kube-config') // Jenkins credential ID for the kubeconfig
     }
     stages {
         stage('Build Docker Image') {
             steps {
                 script {
                     echo 'Building Docker Image...'
-                    bat 'docker build -t studentapp .'  // Use 'bat' for Windows
+                    sh 'docker build -t studentapp .'
                 }
             }
         }
@@ -20,7 +21,12 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying to Kubernetes...'
-                    bat 'kubectl apply -f deployment.yml'  // Use 'bat' for Windows
+                    // Use the kubeconfig from Jenkins credentials to authenticate kubectl
+                    sh '''#!/bin/bash
+                    echo $KUBE_CONFIG > kubeconfig.yaml
+                    export KUBECONFIG=$(pwd)/kubeconfig.yaml
+                    kubectl apply -f deployment.yml --validate=false
+                    '''
                 }
             }
         }
@@ -28,8 +34,8 @@ pipeline {
             steps {
                 script {
                     echo 'Testing Database Connection...'
-                    bat '''@echo off
-                    mysql -h %MYSQL_HOST% -P %MYSQL_PORT% -u %MYSQL_USER% -p%MYSQL_PASSWORD% -D %MYSQL_DB% -e "SHOW TABLES;"  // Use batch script syntax for environment variables
+                    sh '''#!/bin/bash
+                    mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASSWORD -D $MYSQL_DB -e "SHOW TABLES;"
                     '''
                 }
             }
