@@ -3,10 +3,11 @@ kind: Deployment
 metadata:
   name: myapp
 spec:
+  replicas: 1
   strategy:
-    type: RollingUpdate 
+    type: RollingUpdate
     rollingUpdate:
-      maxSurge: 1          
+      maxSurge: 1
       maxUnavailable: 0
   selector:
     matchLabels:
@@ -16,16 +17,20 @@ spec:
       labels:
         app: myapp
     spec:
+      terminationGracePeriodSeconds: 30
       hostNetwork: true
       restartPolicy: Always
       containers:
       - name: studentapp
         image: studentapp
-        imagePullPolicy: Never
+        imagePullPolicy: IfNotPresent
         resources:
-          limits:
-            memory: "500Mi"
-            cpu: "500m"
+           requests:
+             cpu: 250m
+             memory: 500Mi
+           limits:
+             cpu: 500m
+             memory: 1Gi
         ports:
         - containerPort: 8081
 

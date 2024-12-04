@@ -40,8 +40,11 @@ pipeline {
                     echo 'Deploying to Kubernetes...'
                     bat "kubectl --kubeconfig=C:/Users/850075939/.kube/config apply -f deployment.yml"
 
-                    echo 'Restarting the Pods...'
-                    bat  "kubectl --kubeconfig=C:/Users/850075939/.kube/config rollout restart deployment/myapp"
+                    echo 'deleting the existing Pods...'
+                    bat  "kubectl --kubeconfig=C:/Users/850075939/.kube/config delete deployment myapp"
+
+                    echo 'Again Deploying to Kubernetes...'
+                    bat "kubectl --kubeconfig=C:/Users/850075939/.kube/config apply -f deployment.yml"
                 }
             }
         }
