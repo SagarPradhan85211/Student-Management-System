@@ -1,14 +1,12 @@
 pipeline {
     agent any
     environment {
+        KUBE_CONTEXT = "docker-desktop"  // Set the Kubernetes context for Docker Desktop
         MYSQL_HOST = "localhost"
         MYSQL_PORT = "31000"
         MYSQL_DB = "genpact"
         MYSQL_USER = "root"
         MYSQL_PASSWORD = "root"
-        DOCKER_IMAGE_NAME = "studentapp"
-        DOCKER_TAG = "latest"
-        KUBE_CONFIG_PATH = "C:\\Users\\850075939\\.kube"  // Path to kubeconfig on Windows
     }
     stages {
         stage('Build Docker Image') {
@@ -19,13 +17,19 @@ pipeline {
                 }
             }
         }
+        stage('Set Kubernetes Context') {
+            steps {
+                script {
+                    echo 'Switching Kubernetes Context to docker-desktop...'
+                    bat "kubectl config use-context ${KUBE_CONTEXT}"  // Switch to the right context
+                }
+            }
+        }
         stage('Deploy to Kubernetes') {
             steps {
                 script {
                     echo 'Deploying to Kubernetes...'
-                    bat """
-                        kubectl --kubeconfig=%KUBE_CONFIG_PATH% apply -f kubernetes-deployment.yml
-                    """
+                    bat 'kubectl apply -f deployment.yml'  // Apply the deployment.yaml to Kubernetes
                 }
             }
         }
