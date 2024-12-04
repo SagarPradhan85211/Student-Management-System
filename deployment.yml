@@ -22,7 +22,7 @@ spec:
             memory: "300Mi"
             cpu: "300m"
         ports:
-        - containerPort: 8080
+        - containerPort: 8081
 
         volumeMounts:
         - name: student-log
