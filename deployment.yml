@@ -25,17 +25,6 @@ spec:
         volumeMounts:
         - name: student-log
           mountPath: /var/log/apps
-        env:
-        - name: MYSQL_HOST
-          value: "localhost"
-        - name: MYSQL_PORT
-          value: "31000"
-        - name: MYSQL_DB
-          value: "genpact"
-        - name: MYSQL_USER
-          value: "root"
-        - name: MYSQL_PASSWORD
-          value: "root"
 
       volumes:
       - name: student-log
