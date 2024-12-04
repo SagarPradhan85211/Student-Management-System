@@ -21,7 +21,7 @@ spec:
       containers:
       - name: studentapp
         image: studentapp
-        imagePullPolicy: Always
+        imagePullPolicy: Never
         resources:
           limits:
             memory: "500Mi"
