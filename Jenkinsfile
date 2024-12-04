@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script {
                     echo 'Switching Kubernetes Context to docker-desktop...'
-                    bat "kubectl --kubeconfig=${KUBECONFIG} config use-context ${KUBE_CONTEXT} --v=9"  // Verbose output for debugging
+                    bat "kubectl --kubeconfig=C:/Users/850075939/.kube/config config use-context docker-desktop"  // Verbose output for debugging
                 }
             }
         }
