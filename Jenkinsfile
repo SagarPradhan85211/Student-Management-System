@@ -38,9 +38,12 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying to Kubernetes...'
+                    bat "kubectl --kubeconfig=C:/Users/850075939/.kube/config apply -f deployment.yml"
+
+                    echo 'Restarting the Pods...'
                     bat """
-                    "kubectl --kubeconfig=C:/Users/850075939/.kube/config apply -f deployment.yml"
-                    "kubectl --kubeconfig=C:/Users/850075939/.kube/config rollout status deployment/studentapp"
+                        kubectl --kubeconfig=C:/Users/850075939/.kube/config rollout restart deployment/myapp
+                        kubectl --kubeconfig=C:/Users/850075939/.kube/config rollout status deployment/myapp
                     """
                 }
             }
