@@ -37,7 +37,7 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying to Kubernetes...'
-                    bat 'kubectl --kubeconfig=${KUBECONFIG} apply -f deployment.yml'  // Apply the deployment.yaml to Kubernetes
+                    bat "kubectl --kubeconfig=C:/Users/850075939/.kube/config apply -f deployment.yml"  // Apply the deployment.yaml to Kubernetes
                 }
             }
         }
