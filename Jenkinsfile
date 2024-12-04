@@ -30,6 +30,7 @@ pipeline {
                 script {
                     echo 'Switching Kubernetes Context to docker-desktop...'
                     bat "kubectl --kubeconfig=C:/Users/850075939/.kube/config config use-context docker-desktop"  // Verbose output for debugging
+    
                 }
             }
         }
@@ -37,7 +38,10 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying to Kubernetes...'
-                    bat "kubectl --kubeconfig=C:/Users/850075939/.kube/config apply -f deployment.yml"  // Apply the deployment.yaml to Kubernetes
+                    bat """
+                    "kubectl --kubeconfig=C:/Users/850075939/.kube/config apply -f deployment.yml"
+                    "kubectl --kubeconfig=C:/Users/850075939/.kube/config rollout status deployment/studentapp"
+                    """
                 }
             }
         }
