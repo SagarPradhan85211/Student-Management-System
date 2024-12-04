@@ -41,10 +41,7 @@ pipeline {
                     bat "kubectl --kubeconfig=C:/Users/850075939/.kube/config apply -f deployment.yml"
 
                     echo 'Restarting the Pods...'
-                    bat """
-                        kubectl --kubeconfig=C:/Users/850075939/.kube/config rollout restart deployment/myapp
-                        kubectl --kubeconfig=C:/Users/850075939/.kube/config rollout status deployment/myapp
-                    """
+                    bat  "kubectl --kubeconfig=C:/Users/850075939/.kube/config rollout restart deployment/myapp"
                 }
             }
         }
@@ -63,3 +60,4 @@ pipeline {
         }
     }
 }
+ 
