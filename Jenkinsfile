@@ -45,6 +45,9 @@ pipeline {
 
                     echo 'Again Deploying to Kubernetes...'
                     bat "kubectl --kubeconfig=C:/Users/850075939/.kube/config apply -f deployment.yml"
+
+                    echo 'Port Forwarding to 8081'
+                    bat "kubectl --kubeconfig=C:/Users/850075939/.kube/config port-forward svc/serviceapp 8081:8081"
                 }
             }
         }
